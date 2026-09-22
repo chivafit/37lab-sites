@@ -66,21 +66,43 @@
     word-break: normal;
   }
 
+  /* Sobre o profissional: transforma as credenciais em uma faixa horizontal
+     para reduzir o vazio e manter a leitura premium no mobile. */
   .credentials {
-    gap: 12px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: start;
+    margin-top: 14px;
   }
 
   .credentials > span {
-    gap: 10px;
-    min-height: 36px;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: center;
+    line-height: 1.15;
   }
 
   .credentials .icon {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
-    font-size: 14px;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    margin: 0 auto;
+    font-size: 12px;
+  }
+
+  .credentials b,
+  .credentials span:not(.icon) {
+    font-size: 8px;
+    line-height: 1.2;
+    text-align: center;
   }
 }
 
@@ -88,4 +110,20 @@
   .trustRow { gap: 5px; }
   .trustRow span:not(.icon),
   .trustRow b { font-size: 7px; }
+
+  .credentials {
+    gap: 5px;
+  }
+
+  .credentials .icon {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .credentials b,
+  .credentials span:not(.icon) {
+    font-size: 7px;
+  }
 }
