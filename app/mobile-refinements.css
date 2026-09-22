@@ -1,77 +1,9 @@
 /* 37LAB Medical 01 — responsive refinements + dynamic client theme */
-
-/* Tema por cliente. As variáveis são fornecidas pelo cadastro em professionals.ts. */
-.medicalSite {
-  background: var(--theme-background, #f7f8f5);
-  color: var(--theme-primary, #104f40);
-}
-.medicalSite .hero h1,
-.medicalSite .about h2,
-.medicalSite .sectionIntro h2,
-.medicalSite .location h2,
-.medicalSite .faq h2,
-.medicalSite .brand strong,
-.medicalSite .cards h3,
-.medicalSite .footerBrand strong { color: var(--theme-primary, #104f40); }
-.medicalSite .hero h1 em { color: var(--theme-secondary, #618077); }
-.medicalSite .eyebrow { color: var(--theme-secondary, #5a897d); }
-.medicalSite .headerCta,
-.medicalSite .primary,
-.medicalSite .mapButton,
-.medicalSite .mapPin,
-.medicalSite .doctorCard,
-.medicalSite .cards article:hover .icon,
-.medicalSite .footerSocial a:hover .icon { background: var(--theme-primary, #104f40); }
-.medicalSite .cards article:hover .icon,
-.medicalSite .footerSocial a:hover .icon { border-color: var(--theme-primary, #104f40); }
-.medicalSite .navLinks a:after { background: var(--theme-primary, #104f40); }
-.medicalSite .cta { background: var(--theme-primary, #104f40); }
-.medicalSite .cta > a { color: var(--theme-primary, #104f40); }
-.medicalSite .about,
-.medicalSite .location,
-.medicalSite footer { background: var(--theme-surface, #fff); }
-.medicalSite .services,
-.medicalSite .faq { background: var(--theme-background, #f8faf7); }
-
-/* Credenciais: círculos e glifos visualmente centralizados em desktop e mobile */
-.credentials { align-items: center; }
-.credentials > span { display:flex; align-items:center; gap:10px; }
-.credentials .icon {
-  width:34px;height:34px;min-width:34px;min-height:34px;padding:0;margin:0;
-  display:inline-flex;align-items:center;justify-content:center;text-align:center;
-  line-height:1;font-size:14px;vertical-align:middle;
-}
-
-@media (max-width:560px) {
-  .trustRow {
-    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:start;
-  }
-  .trustRow > div {
-    min-width:0;padding:4px 0;display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;gap:6px;text-align:center;
-  }
-  .trustRow .icon { width:29px;height:29px;margin:0 auto; }
-  .trustRow span:not(.icon) { width:100%;font-size:8px;line-height:1.2;text-align:center; }
-  .trustRow b { font-size:8px;line-height:1.15;overflow-wrap:normal;word-break:normal; }
-
-  .credentials {
-    width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
-    align-items:start;margin-top:14px;
-  }
-  .credentials > span {
-    min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;
-    justify-content:flex-start;gap:6px;text-align:center;line-height:1.15;
-  }
-  .credentials .icon {
-    width:30px;height:30px;min-width:30px;min-height:30px;margin:0 auto;font-size:12px;
-  }
-  .credentials b,.credentials span:not(.icon) { font-size:8px;line-height:1.2;text-align:center; }
-}
-
-@media (max-width:340px) {
-  .trustRow { gap:5px; }
-  .trustRow span:not(.icon),.trustRow b { font-size:7px; }
-  .credentials { gap:5px; }
-  .credentials .icon { width:28px;height:28px;min-width:28px;min-height:28px; }
-  .credentials b,.credentials span:not(.icon) { font-size:7px; }
-}
+.medicalSite{background:var(--theme-background,#f7f8f5);color:var(--theme-primary,#104f40)}
+.medicalSite .hero h1,.medicalSite .about h2,.medicalSite .sectionIntro h2,.medicalSite .location h2,.medicalSite .faq h2,.medicalSite .brand strong,.medicalSite .cards h3,.medicalSite .footerBrand strong{color:var(--theme-primary,#104f40)}
+.medicalSite .hero h1 em{color:var(--theme-secondary,#618077)}.medicalSite .eyebrow{color:var(--theme-secondary,#5a897d)}
+.medicalSite .headerCta,.medicalSite .primary,.medicalSite .mapButton,.medicalSite .mapPin,.medicalSite .doctorCard,.medicalSite .cards article:hover .icon,.medicalSite .footerSocial a:hover .icon{background:var(--theme-primary,#104f40)}
+.medicalSite .cards article:hover .icon,.medicalSite .footerSocial a:hover .icon{border-color:var(--theme-primary,#104f40)}.medicalSite .navLinks a:after{background:var(--theme-primary,#104f40)}.medicalSite .cta{background:var(--theme-primary,#104f40)}.medicalSite .cta>a{color:var(--theme-primary,#104f40)}.medicalSite .about,.medicalSite .location,.medicalSite footer{background:var(--theme-surface,#fff)}.medicalSite .services,.medicalSite .faq{background:var(--theme-background,#f8faf7)}
+.credentials{align-items:center}.credentials>span{display:flex;align-items:center;gap:10px}.credentials .icon{width:34px;height:34px;min-width:34px;min-height:34px;padding:0;margin:0;display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1;font-size:14px;vertical-align:middle}
+@media(max-width:560px){.trustRow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}.trustRow>div{min-width:0;padding:6px 2px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;text-align:center}.trustRow .icon{width:32px;height:32px;margin:0 auto}.trustRow span:not(.icon){width:100%;font-size:12px;line-height:1.35;text-align:center}.trustRow b{font-size:12px;line-height:1.3;overflow-wrap:normal;word-break:normal}.credentials{width:100%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start;margin-top:18px}.credentials>span{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;text-align:center;line-height:1.3}.credentials .icon{width:32px;height:32px;min-width:32px;min-height:32px;margin:0 auto;font-size:14px}.credentials b,.credentials span:not(.icon){font-size:12px;line-height:1.3;text-align:center}}
+@media(max-width:340px){.trustRow,.credentials{grid-template-columns:1fr;gap:10px}.trustRow>div,.credentials>span{flex-direction:row;text-align:left;justify-content:flex-start}.trustRow span:not(.icon),.trustRow b,.credentials b,.credentials span:not(.icon){font-size:12px;text-align:left}.credentials .icon,.trustRow .icon{margin:0}}
