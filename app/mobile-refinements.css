@@ -1,4 +1,32 @@
-/* 37LAB Medical 01 — mobile refinements */
+/* 37LAB Medical 01 — responsive refinements */
+
+/* Credenciais: círculos e glifos visualmente centralizados em desktop e mobile */
+.credentials {
+  align-items: center;
+}
+
+.credentials > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.credentials .icon {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  min-height: 34px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
 @media (max-width: 560px) {
   .trustRow {
     display: grid;
@@ -36,6 +64,23 @@
     line-height: 1.15;
     overflow-wrap: normal;
     word-break: normal;
+  }
+
+  .credentials {
+    gap: 12px;
+  }
+
+  .credentials > span {
+    gap: 10px;
+    min-height: 36px;
+  }
+
+  .credentials .icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+    font-size: 14px;
   }
 }
 
