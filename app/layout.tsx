@@ -3,6 +3,7 @@ import './mobile-refinements.css';
 import './medical-02.css';
 import './care-01.css';
 import './dental-01.css';
+import './dental-02.css';
 import './physio-01.css';
 import './clinic-01.css';
 import './template-typography.css';
