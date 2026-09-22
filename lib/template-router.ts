@@ -1,0 +1,4 @@
+export type LeadCategory='medical'|'dental'|'care'|'physio'|'clinic';
+export function normalizeCategory(value=''):LeadCategory{const v=value.toLowerCase();if(/dent|odonto|ortodont|implant/.test(v))return'dental';if(/fisio|pilates|osteop/.test(v))return'physio';if(/psico|nutri|fono|terap|estet|enferm/.test(v))return'care';if(/cl[ií]nica|laborat|hospital|centro/.test(v))return'clinic';return'medical'}
+export function suggestTemplate(category:string,specialty='',seed=''){const c=normalizeCategory(`${category} ${specialty}`);if(c==='dental')return hash(seed)%2===0?'dental-01':'dental-02';if(c==='physio')return'physio-01';if(c==='care')return'care-01';if(c==='clinic')return'clinic-01';return hash(seed)%2===0?'medical-01':'medical-02'}
+function hash(s:string){return [...s].reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0)&0x7fffffff}
