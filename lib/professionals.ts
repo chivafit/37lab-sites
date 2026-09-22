@@ -15,6 +15,7 @@ export type Professional = {
   registration?:string; clinic?:string; address?:string; phone?:string;
   whatsapp?:string; instagram?:string; bio:string; services:Service[];
   template:'medical-01'|'care-01'|'dental-01'; status:'demo'|'active';
+  domain?:string;
   city?:string; state?:string; eyebrow?:string; heroTitle?:string; heroEmphasis?:string;
   aboutTitle?:string; aboutText?:string; quote?:string; careLabel?:string;
   clinicImage?:string; professionalImage?:string; instagramLabel?:string;
@@ -29,6 +30,11 @@ export type Professional = {
   Para criar um novo site Medical 01, duplique apenas um objeto abaixo e altere
   os dados do profissional. O componente visual em app/demo/[slug]/page.tsx
   permanece compartilhado entre todos os clientes.
+
+  Para publicar em domínio próprio:
+  1. defina domain:'dominiodocliente.com.br'
+  2. altere status para 'active'
+  3. adicione o domínio ao projeto na Vercel e configure o DNS solicitado.
 
   Imagens podem ser adicionadas em /public/clients/<slug>/ e referenciadas como:
   professionalImage: '/clients/<slug>/professional.jpg'
@@ -89,4 +95,9 @@ export const professionals: Professional[] = [
 
 export function getProfessional(slug:string){
   return professionals.find(p=>p.slug===slug);
+}
+
+export function getProfessionalByDomain(hostname:string){
+  const host=hostname.toLowerCase().split(':')[0].replace(/^www\./,'');
+  return professionals.find(p=>p.domain?.toLowerCase().replace(/^www\./,'')===host);
 }
