@@ -1,0 +1,1 @@
+export default function Home(){return <main style={{padding:'10vh 8vw'}}><small>37LAB SITES</small><h1 style={{font:'52px Georgia,serif'}}>Ambiente de demonstrações</h1><p>Sites profissionais dinâmicos desenvolvidos pela 37LAB.</p><a className="primary" href="/demo/lucas-camargos">Abrir demo Medical 01</a></main>}
