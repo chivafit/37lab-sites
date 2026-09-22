@@ -1,0 +1,70 @@
+/* 37LAB Template Typography Standard
+   Regra obrigatoria para todos os templates presentes e futuros.
+   Texto funcional nunca deve depender de microtipografia para caber no layout.
+   Body/conteudo: 16px preferencial; secundario: >=14px; labels/eyebrows: >=12px.
+   Elementos decorativos podem ser menores somente quando nao carregam informacao essencial.
+*/
+
+.medicalSite,.medical02{font-size:16px}
+
+/* Medical 01 — readable floor */
+.medicalSite .demoBar,.medicalSite .demoBar b,
+.medicalSite .brand small,.medicalSite .navLinks a,.medicalSite .headerCta,
+.medicalSite .eyebrow,.medicalSite .primary,.medicalSite .secondary,
+.medicalSite .trustRow span:not(.icon),.medicalSite .trustRow b,
+.medicalSite .photoPlaceholder>span,.medicalSite .doctorCard small,
+.medicalSite .doctorCard span,.medicalSite .visualBadge,.medicalSite .aboutStat span,
+.medicalSite .credentials span,.medicalSite .cardNumber,.medicalSite .cards p,
+.medicalSite .clinicPlaceholder,.medicalSite .locationLine,.medicalSite .mapButton,
+.medicalSite .mapMock,.medicalSite .faqList details p,.medicalSite .cta p,
+.medicalSite .cta>a,.medicalSite .footerBrand span,.medicalSite .footerNav a,
+.medicalSite .footerBottom{font-size:max(12px,0.75rem)}
+.medicalSite .heroCopy>p,.medicalSite .aboutCopy>p,.medicalSite .sectionIntro p,
+.medicalSite .faq>div>p{font-size:16px}
+.medicalSite .cards p,.medicalSite .faqList details p,.medicalSite .cta p,.medicalSite .locationLine{font-size:14px}
+.medicalSite .primary,.medicalSite .secondary,.medicalSite .headerCta,.medicalSite .mapButton,.medicalSite .cta>a{font-size:14px}
+.medicalSite .trustRow span:not(.icon),.medicalSite .trustRow b,.medicalSite .credentials span{font-size:12px;line-height:1.35}
+
+/* Medical 02 — readable floor */
+.medical02 .m2Demo,.medical02 .m2Brand small,.medical02 .m2Header nav a,
+.medical02 .m2HeaderCta,.medical02 .m2Overline,.medical02 .m2Primary,
+.medical02 .m2TextLink,.medical02 .m2Facts small,.medical02 .m2Portrait small,
+.medical02 .m2Floating small,.medical02 .m2Ticker,.medical02 .m2SectionIndex,
+.medical02 .m2About aside small,.medical02 .m2ServiceNo,.medical02 .m2Statement>span,
+.medical02 .m2ClinicPlaceholder,.medical02 .m2ImageLabel,.medical02 .m2LocationCopy>small,
+.medical02 .m2Map,.medical02 .m2Contact small,.medical02 .m2Contact a,
+.medical02 .m2Footer>div:nth-child(2),.medical02 .m2Footer>div:nth-child(3),
+.medical02 .m2Footer>small{font-size:12px}
+.medical02 .m2HeroCopy>p,.medical02 .m2AboutGrid p{font-size:16px;line-height:1.7}
+.medical02 .m2ServicesHead>p,.medical02 .m2ServiceList p,.medical02 .m2LocationCopy p,
+.medical02 .m2Faq details p,.medical02 .m2Contact p{font-size:14px;line-height:1.65}
+.medical02 .m2Primary,.medical02 .m2HeaderCta,.medical02 .m2Map,.medical02 .m2Contact a{font-size:14px;min-height:44px;display:inline-flex;align-items:center}
+.medical02 .m2TextLink{font-size:14px}
+.medical02 .m2Facts strong{font-size:15px}
+
+@media(max-width:560px){
+  /* Never shrink functional copy below the platform floor on phones. */
+  .medicalSite .demoBar,.medicalSite .headerCta,.medicalSite .brand small,
+  .medicalSite .trustRow span:not(.icon),.medicalSite .trustRow b,
+  .medicalSite .credentials b,.medicalSite .credentials span:not(.icon),
+  .medicalSite .footerBrand span,.medicalSite .footerNav a,.medicalSite .footerBottom{font-size:12px}
+  .medicalSite .heroCopy>p,.medicalSite .aboutCopy>p,.medicalSite .sectionIntro p,
+  .medicalSite .faq>div>p{font-size:16px}
+  .medicalSite .cards p,.medicalSite .locationLine,.medicalSite .faqList details p,.medicalSite .cta p{font-size:14px}
+
+  .medical02 .m2Demo,.medical02 .m2Brand small,.medical02 .m2Overline,
+  .medical02 .m2Facts small,.medical02 .m2Portrait small,.medical02 .m2Ticker,
+  .medical02 .m2SectionIndex,.medical02 .m2ServiceNo,.medical02 .m2Statement>span,
+  .medical02 .m2ClinicPlaceholder,.medical02 .m2ImageLabel,.medical02 .m2LocationCopy>small,
+  .medical02 .m2Contact small,.medical02 .m2Footer>div:nth-child(2),
+  .medical02 .m2Footer>div:nth-child(3),.medical02 .m2Footer>small{font-size:12px}
+  .medical02 .m2HeroCopy>p,.medical02 .m2AboutGrid p{font-size:16px}
+  .medical02 .m2ServicesHead>p,.medical02 .m2ServiceList p,.medical02 .m2LocationCopy p,
+  .medical02 .m2Faq details p,.medical02 .m2Contact p{font-size:14px}
+}
+
+/* 200% text zoom/reflow guardrails */
+@media(max-width:900px){
+  .medicalSite a,.medicalSite p,.medicalSite span,.medicalSite b,.medicalSite strong,
+  .medical02 a,.medical02 p,.medical02 span,.medical02 b,.medical02 strong{overflow-wrap:break-word}
+}
