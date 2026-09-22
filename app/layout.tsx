@@ -1,6 +1,7 @@
 import './globals.css';
 import './mobile-refinements.css';
 import './medical-02.css';
+import './template-typography.css';
 import './admin-generator.css';
 import type { Metadata } from 'next';
 
