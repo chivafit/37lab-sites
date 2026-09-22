@@ -1,0 +1,46 @@
+/* 37LAB Medical 01 — mobile refinements */
+@media (max-width: 560px) {
+  .trustRow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    align-items: start;
+  }
+
+  .trustRow > div {
+    min-width: 0;
+    padding: 4px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .trustRow .icon {
+    width: 29px;
+    height: 29px;
+    margin: 0 auto;
+  }
+
+  .trustRow span:not(.icon) {
+    width: 100%;
+    font-size: 8px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .trustRow b {
+    font-size: 8px;
+    line-height: 1.15;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+}
+
+@media (max-width: 340px) {
+  .trustRow { gap: 5px; }
+  .trustRow span:not(.icon),
+  .trustRow b { font-size: 7px; }
+}
