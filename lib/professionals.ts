@@ -24,22 +24,7 @@ export type Professional = {
   seo?:SEO;
 };
 
-/*
-  37LAB — catálogo de clientes
-
-  Para criar um novo site Medical 01, duplique apenas um objeto abaixo e altere
-  os dados do profissional. O componente visual em app/demo/[slug]/page.tsx
-  permanece compartilhado entre todos os clientes.
-
-  Para publicar em domínio próprio:
-  1. defina domain:'dominiodocliente.com.br'
-  2. altere status para 'active'
-  3. adicione o domínio ao projeto na Vercel e configure o DNS solicitado.
-
-  Imagens podem ser adicionadas em /public/clients/<slug>/ e referenciadas como:
-  professionalImage: '/clients/<slug>/professional.jpg'
-  clinicImage: '/clients/<slug>/clinic.jpg'
-*/
+/* 37LAB — catálogo de clientes. Cada objeto alimenta o mesmo template. */
 export const professionals: Professional[] = [
   {
     slug:'lucas-camargos',
@@ -52,51 +37,67 @@ export const professionals: Professional[] = [
     address:'Rua Padre Abel, 191/194, Centro — Piumhi/MG',
     phone:'(37) 99935-8585',
     whatsapp:'5537999358585',
-    city:'Piumhi',
-    state:'MG',
-
+    city:'Piumhi',state:'MG',
     eyebrow:'SAÚDE • ESCUTA • PREVENÇÃO',
-    heroTitle:'Cuidado próximo.',
-    heroEmphasis:'Saúde por inteiro.',
+    heroTitle:'Cuidado próximo.',heroEmphasis:'Saúde por inteiro.',
     bio:'Atendimento médico com foco em prevenção, acompanhamento e cuidado integral em todas as fases da vida.',
     aboutTitle:'Medicina com escuta, ciência e humanidade.',
     aboutText:'A proposta é construir uma relação de confiança, com atenção à prevenção, ao acompanhamento e às necessidades individuais de cada paciente.',
-    quote:'Cuidar da saúde também é acompanhar, orientar e prevenir.',
-    careLabel:'cuidado centrado em cada paciente',
-
+    quote:'Cuidar da saúde também é acompanhar, orientar e prevenir.',careLabel:'cuidado centrado em cada paciente',
     services:[
       {title:'Consulta Clínica Geral',description:'Avaliação completa e acompanhamento individualizado.',icon:'plus'},
       {title:'Atenção Primária',description:'Cuidado contínuo, prevenção e promoção da saúde.',icon:'heart'},
       {title:'Check-up e Prevenção',description:'Orientações e acompanhamento preventivo.',icon:'shield'},
       {title:'Acompanhamento',description:'Monitoramento clínico e continuidade do cuidado.',icon:'heart'}
     ],
-
     faqs:[
       {question:'Como faço para agendar?',answer:'Entre em contato pelo WhatsApp e consulte os horários disponíveis.'},
       {question:'Onde acontece o atendimento?',answer:'O atendimento acontece na Clínica Mais Saúde GMS — Rua Padre Abel, 191/194, Centro — Piumhi/MG.'},
       {question:'Atende por convênio?',answer:'Consulte diretamente a equipe para confirmar convênios e modalidades de atendimento.'},
       {question:'Como funciona a primeira consulta?',answer:'As orientações específicas são fornecidas no momento do agendamento.'}
     ],
-
-    theme:{
-      primary:'#155846',
-      secondary:'#6f9187',
-      background:'#f7f9f5',
-      surface:'#ffffff'
-    },
-    seo:{
-      title:'Dr. Lucas Camargos | Clínica Geral e Atenção Primária em Piumhi',
-      description:'Atendimento médico com foco em prevenção, acompanhamento e cuidado integral em Piumhi, MG.'
-    },
-    template:'medical-01',
-    status:'demo'
+    theme:{primary:'#155846',secondary:'#6f9187',background:'#f7f9f5',surface:'#ffffff'},
+    seo:{title:'Dr. Lucas Camargos | Clínica Geral e Atenção Primária em Piumhi',description:'Atendimento médico com foco em prevenção, acompanhamento e cuidado integral em Piumhi, MG.'},
+    template:'medical-01',status:'demo'
+  },
+  {
+    slug:'paulo-henrique-faria',
+    name:'Dr. Paulo Henrique Faria Silva',
+    shortName:'Dr. Paulo Henrique Faria',
+    profession:'Médico',
+    specialty:'Oftalmologia',
+    registration:'CRM-MG 44048',
+    clinic:'Ophtalmocenter',
+    address:'Praça Tuiuti, 160, 2º andar — Piumhi/MG',
+    phone:'(37) 3371-2626',
+    city:'Piumhi',state:'MG',
+    eyebrow:'VISÃO • PREVENÇÃO • CUIDADO',
+    heroTitle:'Cuidado com a visão.',
+    heroEmphasis:'Precisão em cada olhar.',
+    bio:'Atendimento oftalmológico para crianças e adultos, com cuidado individualizado e atenção à saúde ocular.',
+    aboutTitle:'Oftalmologia com atenção, precisão e cuidado.',
+    aboutText:'Dr. Paulo Henrique Faria atua em Oftalmologia em Piumhi. Informações públicas de perfil profissional também o apresentam como diretor técnico da Clínica Ophtalmocenter e com atuação relacionada a catarata e glaucoma.',
+    quote:'Cuidar da visão é também acompanhar mudanças, prevenir riscos e preservar qualidade de vida.',
+    careLabel:'cuidado individualizado da saúde ocular',
+    services:[
+      {title:'Consulta Oftalmológica',description:'Avaliação da saúde ocular para crianças e adultos.',icon:'plus'},
+      {title:'Avaliação da Visão',description:'Acompanhamento de alterações visuais e orientação oftalmológica.',icon:'user'},
+      {title:'Catarata',description:'Avaliação e acompanhamento oftalmológico relacionado à catarata.',icon:'shield'},
+      {title:'Glaucoma',description:'Avaliação e acompanhamento da saúde ocular com atenção ao glaucoma.',icon:'heart'}
+    ],
+    faqs:[
+      {question:'Como faço para agendar?',answer:'Entre em contato com a clínica para consultar disponibilidade de horários.'},
+      {question:'Onde acontece o atendimento?',answer:'A referência pública consultada informa atendimento na Praça Tuiuti, 160, 2º andar, em Piumhi/MG.'},
+      {question:'Atende crianças e adultos?',answer:'O perfil profissional público consultado informa atendimento a adultos e crianças de qualquer idade.'},
+      {question:'Quais informações devo confirmar antes da consulta?',answer:'Confirme diretamente com a clínica horários, modalidades de atendimento, convênios e orientações para a consulta.'}
+    ],
+    theme:{primary:'#173f52',secondary:'#6f8f9b',background:'#f5f8f8',surface:'#ffffff'},
+    seo:{title:'Dr. Paulo Henrique Faria | Oftalmologista em Piumhi',description:'Oftalmologia em Piumhi, MG, com atendimento para crianças e adultos e cuidado individualizado da saúde ocular.'},
+    template:'medical-01',status:'demo'
   }
 ];
 
-export function getProfessional(slug:string){
-  return professionals.find(p=>p.slug===slug);
-}
-
+export function getProfessional(slug:string){return professionals.find(p=>p.slug===slug);}
 export function getProfessionalByDomain(hostname:string){
   const host=hostname.toLowerCase().split(':')[0].replace(/^www\./,'');
   return professionals.find(p=>p.domain?.toLowerCase().replace(/^www\./,'')===host);
