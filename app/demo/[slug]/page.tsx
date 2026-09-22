@@ -1,15 +1,35 @@
+import type { CSSProperties } from 'react';
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getProfessional } from '../../../lib/professionals';
 
+type PageProps={params:Promise<{slug:string}>};
+type ThemeStyle=CSSProperties & Record<`--${string}`,string>;
+
 const Icon=({type}:{type:string})=>{const icons:Record<string,string>={heart:'♡',shield:'◇',user:'♙',plus:'✦',pin:'⌖',phone:'☎',instagram:'◎',arrow:'↗'};return <span className="icon">{icons[type]||'✦'}</span>};
 
-export default async function DemoPage({params}:{params:Promise<{slug:string}>}){
+export async function generateMetadata({params}:PageProps):Promise<Metadata>{
+ const {slug}=await params; const p=getProfessional(slug);
+ if(!p) return {};
+ const title=p.seo?.title||`${p.shortName} | ${p.specialty}`;
+ const description=p.seo?.description||p.bio;
+ const robots=p.status==='active'?{index:true,follow:true}:{index:false,follow:false};
+ return {title,description,robots,openGraph:{title,description,type:'website'}};
+}
+
+export default async function DemoPage({params}:PageProps){
  const {slug}=await params; const p=getProfessional(slug); if(!p) notFound();
  const mapQuery=encodeURIComponent([p.clinic,p.address].filter(Boolean).join(' '));
  const initials=p.shortName.split(' ').slice(1,3).map(x=>x[0]).join('');
  const faqs=p.faqs||[];
- return <main>
-  <div className="demoBar"><span>CONCEITO 37LAB</span><b>Demonstração privada</b><span>NÃO INDEXADA</span></div>
+ const themeStyle:ThemeStyle={
+  '--theme-primary':p.theme?.primary||'#104f40',
+  '--theme-secondary':p.theme?.secondary||'#618077',
+  '--theme-background':p.theme?.background||'#f7f8f5',
+  '--theme-surface':p.theme?.surface||'#ffffff'
+ };
+ return <main className="medicalSite" style={themeStyle}>
+  {p.status==='demo'&&<div className="demoBar"><span>CONCEITO 37LAB</span><b>Demonstração privada</b><span>NÃO INDEXADA</span></div>}
   <header className="siteHeader"><a className="brand" href="#inicio"><span className="brandMark">✦</span><span><strong>{p.shortName}</strong><small>{p.specialty}</small></span></a><nav className="navLinks"><a href="#sobre">Sobre</a><a href="#servicos">Atuação</a><a href="#local">Local</a><a href="#faq">Dúvidas</a></nav><a className="headerCta" href="#contato">Agendar <span>↗</span></a></header>
   <section id="inicio" className="hero reveal"><div className="heroCopy"><div className="eyebrow">{p.eyebrow||'SAÚDE • CUIDADO • CONFIANÇA'}</div><h1>{p.heroTitle||'Cuidado próximo.'}<br/><em>{p.heroEmphasis||'Saúde por inteiro.'}</em></h1><p>{p.bio}</p><div className="heroActions">{p.whatsapp&&<a className="primary" href={`https://wa.me/${p.whatsapp}`} target="_blank" rel="noreferrer">Agendar pelo WhatsApp <span>↗</span></a>}<a className="secondary" href="#sobre">Conheça a abordagem</a></div><div className="trustRow"><div><Icon type="user"/><span><b>Atendimento</b>individualizado</span></div><div><Icon type="shield"/><span><b>Prevenção</b>cuidado contínuo</span></div><div><Icon type="heart"/><span><b>Acompanhamento</b>humanizado</span></div></div></div><div className="heroVisual">{p.professionalImage?<img className="professionalPhoto" src={p.professionalImage} alt={`Foto profissional de ${p.name}`}/>:<div className="photoPlaceholder"><div className="photoMonogram">{initials}</div><span>Foto profissional do cliente</span></div>}<div className="doctorCard"><small>{p.profession}</small><strong>{p.name}</strong><span>{p.registration}</span></div><div className="visualBadge">{p.city||'Piumhi'} • {p.state||'MG'}</div></div></section>
   <section id="sobre" className="about reveal"><div className="aboutVisual">{p.clinicImage?<img className="consultPhoto" src={p.clinicImage} alt="Ambiente de atendimento"/>:<div className="consultPlaceholder"><Icon type="plus"/><span>Imagem de atendimento / consultório</span></div>}<div className="aboutStat"><strong>01</strong><span>{p.careLabel||'cuidado centrado em cada paciente'}</span></div></div><div className="aboutCopy"><div className="eyebrow">SOBRE O PROFISSIONAL</div><h2>{p.aboutTitle||'Cuidado, ciência e humanidade.'}</h2><p>{p.bio}</p>{p.aboutText&&<p>{p.aboutText}</p>}{p.quote&&<blockquote>“{p.quote}”</blockquote>}<div className="credentials"><span><Icon type="plus"/><b>{p.profession}</b></span>{p.registration&&<span><Icon type="shield"/><b>{p.registration}</b></span>}<span><Icon type="heart"/><b>Cuidado humanizado</b></span></div></div></section>
