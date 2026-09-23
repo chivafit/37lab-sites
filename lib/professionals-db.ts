@@ -11,13 +11,14 @@ type DbProfessional = {
 };
 
 export async function getProfessionalRecord(slug:string):Promise<Professional|undefined>{
-  if(!supabase) return getProfessional(slug);
-  const {data,error}=await supabase.from('professionals').select('*, professional_services(*), professional_faqs(*), professional_images(*)').eq('slug',slug).maybeSingle();
+  const client=supabase;
+  if(!client) return getProfessional(slug);
+  const {data,error}=await client.from('professionals').select('*, professional_services(*), professional_faqs(*), professional_images(*)').eq('slug',slug).maybeSingle();
   if(error||!data) return getProfessional(slug);
   const p=data as DbProfessional & {professional_services:any[];professional_faqs:any[];professional_images:any[]};
   const content=(p.content||{}) as Record<string,any>;
   const images=[...(p.professional_images||[])].sort((a,b)=>(a.position||0)-(b.position||0));
-  const imageUrl=(kind:string)=>{const row=images.find(x=>x.kind===kind);return row?.storage_path?supabase.storage.from('professional-images').getPublicUrl(row.storage_path).data.publicUrl:undefined};
+  const imageUrl=(kind:string)=>{const row=images.find(x=>x.kind===kind);return row?.storage_path?client.storage.from('professional-images').getPublicUrl(row.storage_path).data.publicUrl:undefined};
   const registration=[p.registration_label,p.registration_number].filter(Boolean).join(' ');
   return {
     slug:p.slug,name:p.name,shortName:content.shortName||p.name,profession:p.professional_title||content.profession||'',specialty:p.specialty||'',registration:registration||undefined,
