@@ -1,0 +1,37 @@
+/* 37LAB: preserve the professional's full portrait inside template photo areas.
+   We prefer a little breathing room/letterboxing to cropping a face, hair, shoulders or body. */
+.professionalPhoto,
+.d2Visual>img,
+.m2Visual>img,
+.d1Visual>img,
+.careVisual>img,
+.physioVisual>img,
+.clinicVisual>img {
+  object-fit: contain !important;
+  object-position: center center !important;
+  background: #fff;
+}
+
+/* Images standardized after background removal are transparent PNGs; white canvas makes them look intentional. */
+.heroVisual,
+.d2Visual,
+.m2Visual,
+.d1Visual,
+.careVisual,
+.physioVisual,
+.clinicVisual {
+  background-color: #fff;
+}
+
+@media (max-width: 900px) {
+  .professionalPhoto,
+  .d2Visual>img,
+  .m2Visual>img,
+  .d1Visual>img,
+  .careVisual>img,
+  .physioVisual>img,
+  .clinicVisual>img {
+    object-fit: contain !important;
+    object-position: center center !important;
+  }
+}
