@@ -18,7 +18,7 @@ export async function getProfessionalRecord(slug:string):Promise<Professional|un
   const p=data as DbProfessional & {professional_services:any[];professional_faqs:any[];professional_images:any[]};
   const content=(p.content||{}) as Record<string,any>;
   const images=[...(p.professional_images||[])].sort((a,b)=>(a.position||0)-(b.position||0));
-  const imageUrl=(...kinds:string[])=>{const row=images.find(x=>kinds.includes(x.kind));return row?.storage_path?client.storage.from('professional-images').getPublicUrl(row.storage_path).data.publicUrl:undefined};
+  const imageUrl=(...kinds:string[])=>{for(const kind of kinds){const row=images.find(x=>x.kind===kind);if(row?.storage_path)return client.storage.from('professional-images').getPublicUrl(row.storage_path).data.publicUrl}return undefined};
   const registration=[p.registration_label,p.registration_number].filter(Boolean).join(' ');
   const storedServices=[...(p.professional_services||[])].sort((a,b)=>a.position-b.position).map(s=>({title:s.title,description:s.description||'',icon:s.icon||undefined}));
   const area=p.specialty||p.professional_title||'Atendimento profissional';
