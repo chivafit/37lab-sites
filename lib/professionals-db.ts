@@ -60,7 +60,8 @@ export async function getProfessionalRecord(slug:string):Promise<Professional|un
     slug:p.slug,name:p.name,shortName:p.name,profession:p.professional_title||'',specialty:p.specialty||'',registration:registration||undefined,
     clinic:p.clinic_name||undefined,address:p.address||undefined,phone:p.phone||undefined,whatsapp:p.whatsapp||undefined,instagram:content.instagram,
     bio,services,
-    template:p.template_key as TemplateId,status:p.status==='published'?'active':'demo',city:p.city||undefined,state:p.state||undefined,
+    template:p.template_key as TemplateId,// Só vira site oficial (indexado, sem faixa de demonstração) quem for marcado como cliente no editor.
+    status:p.status==='published'&&content.isClient===true?'active':'demo',city:p.city||undefined,state:p.state||undefined,
     eyebrow:content.eyebrow,heroTitle:p.hero_title||undefined,heroEmphasis:p.hero_emphasis||undefined,aboutTitle:p.about_title||undefined,aboutText,quote:p.quote||undefined,careLabel:content.careLabel,
     professionalImage:imageUrl('profile'),clinicImage:imageUrl('clinic'),faqs,
     theme:content.theme||undefined,seo:{title:canonicalSeoTitle,description:canonicalSeoDescription}
