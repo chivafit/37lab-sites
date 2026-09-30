@@ -23,7 +23,8 @@ export async function getProfessionalRecord(slug:string):Promise<Professional|un
     if(!row?.storage_path)return undefined;
     return client.storage.from('professional-images').getPublicUrl(row.storage_path).data.publicUrl;
   };
-  const registration=[p.registration_label,p.registration_number].filter(Boolean).join(' ');
+  const rqe=String(content.rqe||'').trim();
+  const registration=[[p.registration_label,p.registration_number].filter(Boolean).join(' '),rqe&&`RQE ${rqe.replace(/^RQE\s*/i,'')}`].filter(Boolean).join(' · ');
   const storedServices=[...(p.professional_services||[])].sort((a,b)=>a.position-b.position).map(s=>({title:s.title,description:s.description||'',icon:s.icon||undefined}));
   const area=p.specialty||p.professional_title||'Atendimento profissional';
   const fallbackServices=[
@@ -39,16 +40,27 @@ export async function getProfessionalRecord(slug:string):Promise<Professional|un
   // continuar aparecendo depois que nome/profissão/cidade forem corrigidos no editor.
   const role=(p.professional_title||p.specialty||'Profissional').trim();
   const place=[p.city,p.state].filter(Boolean).join(', ');
+  const bio=p.hero_description||content.bio||'';
+  // O gerador grava a mesma bio no topo e no "Sobre"; sem texto próprio, o "Sobre" usa um resumo da ficha.
+  const ownAbout=(p.about_body||'').trim();
+  const aboutText=ownAbout&&ownAbout!==bio.trim()?ownAbout:[
+    `${p.name} atua em ${p.specialty||role}${place?`, com atendimento em ${place}`:''}.`,
+    p.clinic_name?`Atende em ${p.clinic_name}.`:'',
+    'Entre em contato para consultar horários e agendar.'
+  ].filter(Boolean).join(' ');
+  const insurance=String(content.insurance||'').trim();
+  const storedFaqs=[...(p.professional_faqs||[])].sort((a,b)=>a.position-b.position).map(f=>({question:f.question,answer:f.answer}));
+  const faqs=insurance&&!storedFaqs.some(f=>/conv[eê]nio/i.test(f.question))?[{question:'Quais convênios são aceitos?',answer:insurance},...storedFaqs]:storedFaqs;
   const canonicalSeoTitle=`${p.name} | ${role}${p.city?` em ${p.city}`:''}`;
   const canonicalSeoDescription=`Atendimento em ${role}${place?` em ${place}`:''}.`;
 
   return {
     slug:p.slug,name:p.name,shortName:p.name,profession:p.professional_title||'',specialty:p.specialty||'',registration:registration||undefined,
     clinic:p.clinic_name||undefined,address:p.address||undefined,phone:p.phone||undefined,whatsapp:p.whatsapp||undefined,instagram:content.instagram,
-    bio:p.hero_description||content.bio||'',services,
+    bio,services,
     template:p.template_key as TemplateId,status:p.status==='published'?'active':'demo',city:p.city||undefined,state:p.state||undefined,
-    eyebrow:content.eyebrow,heroTitle:p.hero_title||undefined,heroEmphasis:p.hero_emphasis||undefined,aboutTitle:p.about_title||undefined,aboutText:p.about_body||undefined,quote:p.quote||undefined,careLabel:content.careLabel,
-    professionalImage:imageUrl('profile'),clinicImage:imageUrl('clinic'),faqs:[...(p.professional_faqs||[])].sort((a,b)=>a.position-b.position).map(f=>({question:f.question,answer:f.answer})),
+    eyebrow:content.eyebrow,heroTitle:p.hero_title||undefined,heroEmphasis:p.hero_emphasis||undefined,aboutTitle:p.about_title||undefined,aboutText,quote:p.quote||undefined,careLabel:content.careLabel,
+    professionalImage:imageUrl('profile'),clinicImage:imageUrl('clinic'),faqs,
     theme:content.theme||undefined,seo:{title:canonicalSeoTitle,description:canonicalSeoDescription}
   };
 }
