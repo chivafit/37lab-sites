@@ -41,9 +41,11 @@ export async function getProfessionalRecord(slug:string):Promise<Professional|un
   const role=(p.professional_title||p.specialty||'Profissional').trim();
   const place=[p.city,p.state].filter(Boolean).join(', ');
   const bio=p.hero_description||content.bio||'';
-  // O gerador grava a mesma bio no topo e no "Sobre"; sem texto próprio, o "Sobre" usa um resumo da ficha.
+  // O gerador grava a mesma bio no topo e no "Sobre"; nesse caso (e sem edição manual no painel)
+  // o "Sobre" usa um resumo da ficha. Texto salvo pelo editor é sempre respeitado.
   const ownAbout=(p.about_body||'').trim();
-  const aboutText=ownAbout&&ownAbout!==bio.trim()?ownAbout:[
+  const generatedDuplicate=!content.aboutManual&&ownAbout===bio.trim();
+  const aboutText=ownAbout&&!generatedDuplicate?ownAbout:[
     `${p.name} atua em ${p.specialty||role}${place?`, com atendimento em ${place}`:''}.`,
     p.clinic_name?`Atende em ${p.clinic_name}.`:'',
     'Entre em contato para consultar horários e agendar.'
