@@ -1,37 +1,62 @@
-/* 37LAB: preserve the professional's full portrait inside template photo areas.
-   We prefer a little breathing room/letterboxing to cropping a face, hair, shoulders or body. */
+/* Uploaded photos fill their template frame without stretching or white letterboxing. */
 .professionalPhoto,
-.d2Visual>img,
-.m2Visual>img,
-.d1Visual>img,
-.careVisual>img,
-.physioVisual>img,
-.clinicVisual>img {
-  object-fit: contain !important;
-  object-position: center center !important;
-  background: #fff;
+.m2HeroMedia > img,
+.dHeroVisual > img,
+.d2Visual > img,
+.cHeroPhoto > img,
+.pVisual > img,
+.clHeroImage > img,
+.consultPhoto,
+.clinicPhoto,
+.m2LocationImage > img,
+.dClinicPhoto > img,
+.d2LocalMedia > img,
+.cLocationPhoto > img,
+.pSpacePhoto > img,
+.clLocationImage > img {
+  display: block;
+  object-fit: cover !important;
+  object-position: center 25%;
+  background: transparent;
 }
 
-/* Images standardized after background removal are transparent PNGs; white canvas makes them look intentional. */
-.heroVisual,
+/* Size image layers against the frame, rather than their original file dimensions. */
+.m2HeroMedia,
+.dHeroVisual,
 .d2Visual,
-.m2Visual,
-.d1Visual,
-.careVisual,
-.physioVisual,
-.clinicVisual {
-  background-color: #fff;
+.cHeroPhoto,
+.pVisual,
+.clHeroImage,
+.m2LocationImage,
+.dClinicPhoto,
+.d2LocalMedia,
+.cLocationPhoto,
+.pSpacePhoto,
+.clLocationImage {
+  position: relative;
 }
 
-@media (max-width: 900px) {
-  .professionalPhoto,
-  .d2Visual>img,
-  .m2Visual>img,
-  .d1Visual>img,
-  .careVisual>img,
-  .physioVisual>img,
-  .clinicVisual>img {
-    object-fit: contain !important;
-    object-position: center center !important;
-  }
+.m2HeroMedia > img,
+.dHeroVisual > img,
+.d2Visual > img,
+.cHeroPhoto > img,
+.pVisual > img,
+.clHeroImage > img,
+.m2LocationImage > img,
+.dClinicPhoto > img,
+.d2LocalMedia > img,
+.cLocationPhoto > img,
+.pSpacePhoto > img,
+.clLocationImage > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Clinic portraits must not inherit the medical template's rounded photo/card styling. */
+.clHeroImage > .professionalPhoto {
+  border-radius: 0;
+  box-shadow: none;
 }
