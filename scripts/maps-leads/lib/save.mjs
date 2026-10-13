@@ -70,7 +70,7 @@ const CSV_COLS = [
   ['id', l => l.source_key], ['nome', l => l.name], ['categoria', l => `${l.raw_data.query} ${l.specialty || ''}`.trim()], ['especialidade', l => l.specialty],
   ['cidade', l => l.city], ['estado', l => l.state], ['endereco', l => l.raw_data.address], ['telefone', l => l.raw_data.phone],
   ['whatsapp', l => l.raw_data.whatsapp], ['email', l => l.raw_data.emails.join(' ')], ['site', l => l.raw_data.website],
-  ['instagram', l => l.raw_data.instagram], ['nota', l => l.raw_data.rating], ['avaliacoes', l => l.raw_data.reviews],
+  ['instagram', l => l.raw_data.instagram], ['has_own_website', l => l.raw_data.has_own_website], ['nota', l => l.raw_data.rating], ['avaliacoes', l => l.raw_data.reviews],
   ['distancia_km', l => l.raw_data.distance_km], ['maps_url', l => l.raw_data.maps_url],
 ];
 const cell = v => String(v ?? '').replace(/;/g, ',').replace(/[\r\n]+/g, ' ').trim();
