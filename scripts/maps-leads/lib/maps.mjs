@@ -2,6 +2,8 @@
 // Os seletores do Maps mudam com frequência: os mais estáveis são os data-item-id
 // (address, phone:tel:..., authority) e o padrão !3d<lat>!4d<lng> da URL do lugar.
 
+import { hasOwnWebsite } from './site.mjs';
+
 const MAPS = 'https://www.google.com/maps';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const jitter = (min, max) => sleep(min + Math.random() * (max - min));
@@ -99,7 +101,8 @@ async function readPlace(page, url) {
   };
 }
 
-export async function searchMaps(page, { query, locality, limit, radiusKm, log = console.log }) {
+// withoutOwnSite: só aceita quem não tem site próprio (sem site, ou só Instagram/Linktree/etc.).
+export async function searchMaps(page, { query, locality, limit, radiusKm, withoutOwnSite = false, log = console.log }) {
   log(`Localizando "${locality}"...`);
   const center = await geocode(page, locality);
   const zoom = zoomFor(radiusKm, center.lat);
@@ -107,8 +110,10 @@ export async function searchMaps(page, { query, locality, limit, radiusKm, log =
 
   await page.goto(`${MAPS}/search/${encodeURIComponent(query)}/@${center.lat},${center.lng},${zoom}z?hl=pt-BR`, { waitUntil: 'domcontentloaded' });
   await acceptConsent(page);
-  // Busca um pouco a mais que o limite: parte dos resultados cai fora do raio.
-  const urls = await collectPlaceUrls(page, Math.ceil(limit * 1.5) + 5, log);
+  // Busca mais que o limite: parte dos resultados cai fora do raio e, com withoutOwnSite,
+  // a maioria tem site próprio. O Maps não lista muito mais que ~120 por busca.
+  const listSize = withoutOwnSite ? limit * 4 + 10 : Math.ceil(limit * 1.5) + 5;
+  const urls = await collectPlaceUrls(page, listSize, log);
   log(`${urls.length} lugares encontrados. Abrindo fichas...`);
 
   const places = [], seen = new Set();
@@ -121,12 +126,14 @@ export async function searchMaps(page, { query, locality, limit, radiusKm, log =
       seen.add(key);
       p.distance_km = p.coords ? Number(distanceKm(center, p.coords).toFixed(2)) : null;
       if (p.distance_km != null && p.distance_km > radiusKm) { log(`  - ${p.name} (${p.distance_km} km, fora do raio)`); continue; }
+      if (withoutOwnSite && hasOwnWebsite(p.website)) { log(`  - ${p.name} (já tem site)`); continue; }
       places.push(p);
-      log(`  ✓ ${places.length}/${limit} ${p.name}${p.phone ? ` · ${p.phone}` : ''}${p.website ? ' · site' : ''}`);
+      log(`  ✓ ${places.length}/${limit} ${p.name}${p.phone ? ` · ${p.phone}` : ''}${hasOwnWebsite(p.website) ? ' · site' : p.website ? ' · link' : ''}`);
     } catch (e) {
       log(`  ! falha ao ler ${url.slice(0, 80)}...: ${e.message.split('\n')[0]}`);
     }
     await jitter(700, 1600);
   }
+  if (places.length < limit) log(`Só ${places.length} de ${limit} atenderam aos filtros nesta busca. Tente aumentar o raio ou variar o termo.`);
   return { center, places };
 }

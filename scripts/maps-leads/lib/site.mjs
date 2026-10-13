@@ -40,6 +40,11 @@ async function get(request, url) {
   } catch { return ''; }
 }
 
+// Site próprio = domínio do profissional. Rede social, agregador, encurtador ou o
+// antigo site gratuito do Google não contam: esse profissional é cliente em potencial.
+const NOT_OWN_SITE = /(instagram\.com|facebook\.com|fb\.com|linktr\.ee|beacons\.ai|bio\.site|wa\.me|whatsapp\.com|doctoralia\.|boaconsulta\.|google\.|business\.site|g\.page|bit\.ly|youtube\.com|tiktok\.com|linkedin\.com)/i;
+export const hasOwnWebsite = website => Boolean(website) && !NOT_OWN_SITE.test(website);
+
 export async function scanWebsite(request, website) {
   // Agregadores e redes sociais não são o site do profissional.
   if (!website || /(instagram\.com|facebook\.com|doctoralia\.|wa\.me|whatsapp\.com|google\.)/i.test(website)) {
