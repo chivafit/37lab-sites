@@ -125,10 +125,14 @@ try {
     if (jobs.length > 1) log(`\n=== [${i + 1}/${jobs.length}] ${job.busca} · ${job.local} ===`);
     try {
       const leads = await runSearch(page, context.request, job);
-      const saved = db ? await saveToSupabase(db, leads) : null;
+      // Entra no CSV/JSON antes de gravar: se o Supabase falhar, a captação não se perde.
       for (const l of leads) all.set(l.source_key, l);
-      summary.push({ ...job, ...statsOf(leads), novos: saved?.inserted ?? null, existentes: saved?.skipped ?? null });
-      log(`${leads.length} leads${saved ? ` · ${saved.inserted} novos no Supabase, ${saved.skipped} já existiam` : ''}`);
+      let saved = null, dbError = null;
+      if (db) {
+        try { saved = await saveToSupabase(db, leads); } catch (e) { dbError = e.message.split('\n')[0]; exitCode = 1; }
+      }
+      summary.push({ ...job, ...statsOf(leads), novos: saved?.inserted ?? null, existentes: saved?.skipped ?? null, erro_supabase: dbError });
+      log(`${leads.length} leads${saved ? ` · ${saved.inserted} novos no Supabase, ${saved.skipped} já existiam` : ''}${dbError ? ` · ! falha ao gravar no Supabase: ${dbError} (os leads estão no CSV)` : ''}`);
     } catch (e) {
       // No lote, uma busca com erro (ex.: bloqueio do Google) não derruba as outras.
       exitCode = 1;
@@ -146,11 +150,12 @@ try {
 
   if (jobs.length > 1) {
     log('\nResumo do lote:');
-    for (const r of summary) log(r.erro ? `  ✗ ${r.busca} · ${r.local}: ${r.erro}` : `  ✓ ${r.busca} · ${r.local}: ${r.total} leads${r.novos != null ? ` (${r.novos} novos)` : ''}`);
+    for (const r of summary) log(r.erro ? `  ✗ ${r.busca} · ${r.local}: ${r.erro}` : `  ${r.erro_supabase ? '!' : '✓'} ${r.busca} · ${r.local}: ${r.total} leads${r.novos != null ? ` (${r.novos} novos)` : ''}${r.erro_supabase ? ` (não gravados no Supabase: ${r.erro_supabase})` : ''}`);
   }
   log(`\n${stats.total} leads · ${stats.com_telefone} telefone · ${stats.com_whatsapp} WhatsApp · ${stats.com_email} e-mail · ${stats.com_site_proprio} com site próprio`);
   log(`CSV:  ${csvPath}\nJSON: ${jsonPath}`);
   if (db) log(`Supabase: ${summary.reduce((n, r) => n + (r.novos || 0), 0)} leads novos em professional_leads`);
+  if (summary.some(r => r.erro_supabase)) log('Algumas buscas não foram gravadas no Supabase: importe o CSV acima em /admin/leads ou rode de novo (leads repetidos são pulados).');
   else log('Para enviar ao painel: rode de novo com --supabase ou importe o CSV em /admin/leads.');
   if (a.json) console.log(JSON.stringify({ stats, summary, csvPath, jsonPath, leads }, null, 2));
 } catch (e) {
