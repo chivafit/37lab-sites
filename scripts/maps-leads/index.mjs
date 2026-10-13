@@ -25,6 +25,7 @@ const { values: a } = parseArgs({
     saida: { type: 'string', short: 'o', default: resolve(here, 'saida') },
     supabase: { type: 'boolean', default: false },
     'sem-site': { type: 'boolean', default: false },
+    'sem-site-proprio': { type: 'boolean', default: false },
     visivel: { type: 'boolean', default: false },
     json: { type: 'boolean', default: false },
     help: { type: 'boolean', short: 'h' },
@@ -40,6 +41,7 @@ if (a.help || !a.busca || !a.local) {
   --raio,  -r   raio em km do centro     (padrão 5)
   --saida, -o   pasta dos arquivos       (padrão scripts/maps-leads/saida)
   --supabase    insere os leads novos em professional_leads
+  --sem-site-proprio  só traz quem NÃO tem site próprio (sem site, ou só Instagram/Linktree)
   --sem-site    não visita os sites (mais rápido, sem e-mail)
   --visivel     mostra o navegador
   --json        imprime o resultado em JSON no stdout (para uso por IA)`);
@@ -61,11 +63,11 @@ const page = await context.newPage();
 
 let exitCode = 0;
 try {
-  const { places } = await searchMaps(page, { query: a.busca, locality: a.local, limit, radiusKm, log });
+  const { places } = await searchMaps(page, { query: a.busca, locality: a.local, limit, radiusKm, withoutOwnSite: a['sem-site-proprio'], log });
 
   if (!a['sem-site']) {
     const withSite = places.filter(p => p.website);
-    log(`Visitando ${withSite.length} sites para buscar e-mail/WhatsApp...`);
+    log(`Visitando ${withSite.length} sites/links para buscar e-mail/WhatsApp...`);
     for (const p of withSite) {
       p.site = await scanWebsite(context.request, p.website);
       if (p.site.emails.length || p.site.whatsapp) log(`  ✓ ${p.name}: ${[...p.site.emails, p.site.whatsapp && `wa ${p.site.whatsapp}`].filter(Boolean).join(', ')}`);
@@ -82,12 +84,12 @@ try {
     com_telefone: leads.filter(l => l.raw_data.phone).length,
     com_whatsapp: leads.filter(l => l.raw_data.whatsapp).length,
     com_email: leads.filter(l => l.raw_data.email).length,
-    com_site: leads.filter(l => l.raw_data.website).length,
+    com_site_proprio: leads.filter(l => l.raw_data.has_own_website).length,
   };
   let supabase = null;
   if (a.supabase) supabase = await saveToSupabase(supabaseFromEnv(), leads);
 
-  log(`\n${stats.total} leads · ${stats.com_telefone} telefone · ${stats.com_whatsapp} WhatsApp · ${stats.com_email} e-mail · ${stats.com_site} site`);
+  log(`\n${stats.total} leads · ${stats.com_telefone} telefone · ${stats.com_whatsapp} WhatsApp · ${stats.com_email} e-mail · ${stats.com_site_proprio} com site próprio`);
   log(`CSV:  ${csvPath}\nJSON: ${jsonPath}`);
   if (supabase) log(`Supabase: ${supabase.inserted} novos em professional_leads, ${supabase.skipped} já existiam`);
   else log('Para enviar ao painel: rode de novo com --supabase ou importe o CSV em /admin/leads.');

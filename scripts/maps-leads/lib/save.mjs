@@ -1,5 +1,6 @@
 import { writeFile, mkdir } from 'node:fs/promises';
 import { createClient } from '@supabase/supabase-js';
+import { hasOwnWebsite } from './site.mjs';
 
 // Cópia de lib/template-router.ts (o script roda fora do Next). Mantenha em sincronia.
 function normalizeCategory(value = '') { const v = value.toLowerCase(); if (/dent|odonto|ortodont|implant/.test(v)) return 'dental'; if (/fisio|pilates|osteop/.test(v)) return 'physio'; if (/psico|nutri|fono|terap|estet|enferm/.test(v)) return 'care'; if (/cl[ií]nica|laborat|hospital|centro/.test(v)) return 'clinic'; return 'medical'; }
@@ -54,7 +55,7 @@ export function toLead(p, { query, locality }) {
       address: p.address, phone, whatsapp,
       whatsapp_source: site.whatsapp ? 'website' : whatsapp ? 'maps_mobile' : null,
       email: site.emails?.[0] || null, emails: site.emails || [],
-      website, instagram,
+      website, instagram, has_own_website: hasOwnWebsite(p.website),
       rating: p.rating, reviews: p.reviews,
       maps_url: p.maps_url, place_id: p.place_id,
       lat: p.coords?.lat ?? null, lng: p.coords?.lng ?? null, distance_km: p.distance_km,

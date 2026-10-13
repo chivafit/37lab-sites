@@ -36,6 +36,7 @@ A chave secreta fica só na sua máquina: o `.env.local` está no `.gitignore`. 
 ```bash
 node index.mjs --busca "dentista" --local "Juiz de Fora, MG" --qtd 30 --raio 5
 node index.mjs -b "fisioterapeuta" -l "Centro, Juiz de Fora - MG" -q 50 -r 3 --supabase
+node index.mjs -b "psicólogo" -l "Juiz de Fora, MG" -q 20 -r 5 --sem-site-proprio
 ```
 
 | Opção | O que faz |
@@ -45,6 +46,7 @@ node index.mjs -b "fisioterapeuta" -l "Centro, Juiz de Fora - MG" -q 50 -r 3 --s
 | `--qtd, -q` | quantidade de leads (padrão 20) |
 | `--raio, -r` | raio em km a partir do centro do local (padrão 5); resultados fora do raio são descartados |
 | `--supabase` | insere os leads **novos** em `professional_leads` |
+| `--sem-site-proprio` | traz só quem **não tem site próprio**: sem site, ou só Instagram, Linktree, Doctoralia etc. São os melhores leads para a 37LAB. A busca percorre mais resultados para completar a quantidade |
 | `--sem-site` | não visita os sites (mais rápido, mas sem e-mail) |
 | `--visivel` | mostra o navegador, útil quando algo falha |
 | `--json` | imprime o resultado em JSON no stdout (para uso por IA) |
@@ -57,6 +59,7 @@ Os arquivos ficam em `scripts/maps-leads/saida/`. O CSV pode ser importado pelo 
 - Um lead que já existe **nunca é sobrescrito**, porque ele pode já ter enriquecimento, demo e etapa comercial. O script também pula quem já entrou por CSV com o mesmo nome na mesma cidade.
 - `whatsapp`: usa o número do link `wa.me` do site; se não houver, usa o telefone do Maps quando ele é celular. A origem fica em `raw_data.whatsapp_source` (`website` ou `maps_mobile`).
 - Quando o "site" cadastrado no Maps é um Instagram, ele vai para o campo `instagram`.
+- `raw_data.has_own_website` indica se o lead tem site próprio, mesmo sem usar `--sem-site-proprio`.
 - O `raw_data` também guarda `rating`, `reviews`, `maps_url`, `lat`/`lng`, `distance_km` e `emails`.
 
 O número de avaliações nem sempre aparece: sem login, o Google mostra uma versão limitada do Maps.
