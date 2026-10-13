@@ -39,12 +39,38 @@ node index.mjs -b "fisioterapeuta" -l "Centro, Juiz de Fora - MG" -q 50 -r 3 --s
 node index.mjs -b "psicólogo" -l "Juiz de Fora, MG" -q 20 -r 5 --sem-site-proprio
 ```
 
+### Tudo de uma vez (lote)
+
+Edite `buscas.json` com as cidades e especialidades. Cada especialidade é buscada em cada cidade com os valores de `padrao`; `extras` recebe buscas avulsas com valores próprios:
+
+```json
+{
+  "padrao": { "qtd": 20, "raio": 5, "semSiteProprio": true },
+  "cidades": ["Juiz de Fora, MG"],
+  "especialidades": ["dentista", "psicólogo", "fisioterapeuta", "nutricionista"],
+  "extras": [{ "busca": "pediatra", "local": "Centro, Juiz de Fora - MG", "qtd": 10, "raio": 2 }]
+}
+```
+
+Depois rode um único comando:
+
+```bash
+npm run lote        # roda todas as buscas e manda os leads novos direto para o painel
+npm run lote:csv    # o mesmo, mas só gera o CSV (sem Supabase)
+```
+
+- **Pausa:** o lote espera de 20 a 40 segundos entre uma busca e outra, para não chamar atenção do Google.
+- **Erros:** uma busca com erro não interrompe as outras, e o resumo final mostra o resultado de cada uma.
+- **Arquivos:** tudo sai em um CSV e um JSON únicos (`saida/lote-<data>.csv`), sem repetir leads.
+- **Chave:** sem a `SUPABASE_SERVICE_ROLE_KEY`, o `npm run lote` avisa antes de começar.
+
 | Opção | O que faz |
 |---|---|
 | `--busca, -b` | tipo de negócio (`dentista`, `psicólogo`, `clínica de fisioterapia`...) |
 | `--local, -l` | cidade ou bairro |
 | `--qtd, -q` | quantidade de leads (padrão 20) |
 | `--raio, -r` | raio em km a partir do centro do local (padrão 5); resultados fora do raio são descartados |
+| `--lote ARQ` | roda todas as buscas de um arquivo JSON (veja acima) |
 | `--supabase` | insere os leads **novos** em `professional_leads` |
 | `--sem-site-proprio` | traz só quem **não tem site próprio**: sem site, ou só Instagram, Linktree, Doctoralia etc. São os melhores leads para a 37LAB. A busca percorre mais resultados para completar a quantidade |
 | `--sem-site` | não visita os sites (mais rápido, mas sem e-mail) |
