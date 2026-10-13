@@ -1,0 +1,6 @@
+{
+  "padrao": { "qtd": 20, "raio": 5, "semSiteProprio": true },
+  "cidades": ["Juiz de Fora, MG"],
+  "especialidades": ["dentista", "psicólogo", "fisioterapeuta", "nutricionista"],
+  "extras": []
+}
