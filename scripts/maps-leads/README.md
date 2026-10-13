@@ -15,7 +15,7 @@ Depois disso o fluxo segue igual: enriquecimento, demo e contato.
 
 ## Instalação (uma vez)
 
-Precisa de Node 20.12 ou mais recente.
+Precisa de Node 22 ou mais recente (exigido pelo `@supabase/supabase-js`).
 
 ```bash
 cd scripts/maps-leads
