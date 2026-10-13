@@ -42,8 +42,17 @@ async function get(request, url) {
 
 // Site próprio = domínio do profissional. Rede social, agregador, encurtador ou o
 // antigo site gratuito do Google não contam: esse profissional é cliente em potencial.
-const NOT_OWN_SITE = /(instagram\.com|facebook\.com|fb\.com|linktr\.ee|beacons\.ai|bio\.site|wa\.me|whatsapp\.com|doctoralia\.|boaconsulta\.|google\.|business\.site|g\.page|bit\.ly|youtube\.com|tiktok\.com|linkedin\.com)/i;
-export const hasOwnWebsite = website => Boolean(website) && !NOT_OWN_SITE.test(website);
+const NOT_OWN_HOSTS = ['instagram.com', 'facebook.com', 'fb.com', 'linktr.ee', 'beacons.ai', 'bio.site', 'wa.me', 'whatsapp.com',
+  'boaconsulta.com', 'business.site', 'g.page', 'bit.ly', 'youtube.com', 'tiktok.com', 'linkedin.com'];
+// Marcas com vários TLDs (google.com.br, doctoralia.com.br...).
+const NOT_OWN_BRANDS = /(^|\.)(google|doctoralia)\.[a-z]{2,3}(\.[a-z]{2})?$/;
+// Compara só o hostname: "mybusiness.site" é domínio próprio, "x.business.site" não.
+export function hasOwnWebsite(website) {
+  if (!website) return false;
+  let host;
+  try { host = new URL(/^https?:\/\//i.test(website) ? website : `https://${website}`).hostname.toLowerCase().replace(/^www\./, ''); } catch { return false; }
+  return !NOT_OWN_HOSTS.some(d => host === d || host.endsWith(`.${d}`)) && !NOT_OWN_BRANDS.test(host);
+}
 
 export async function scanWebsite(request, website) {
   // Agregadores e redes sociais não são o site do profissional.
