@@ -3,4 +3,4 @@
 .seqSteps{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:-2px}.seqBtn{background:#fff;color:#4a5651;border:1px solid #dfe3e1;border-radius:6px;padding:5px 9px;cursor:pointer;font:600 9.5px Inter,Arial,sans-serif}.seqBtn.due{background:#18231f;color:#fff;border-color:#18231f}.seqBtn:hover{filter:brightness(.97)}.seqDone{font:600 9.5px Inter,Arial,sans-serif;color:#2f7a55;background:#eaf5ef;border-radius:6px;padding:5px 9px}.seqTodo{font:600 9.5px Inter,Arial,sans-serif;color:#a3aca8;border:1px dashed #dfe3e1;border-radius:6px;padding:4px 9px}
 .contactActions{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:700px){.todayAlert{flex-direction:column;align-items:flex-start}}
-
+.seqBtn:disabled{cursor:default;color:#8b9590;background:#f6f7f6}
