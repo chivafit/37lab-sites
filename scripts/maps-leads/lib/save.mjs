@@ -18,6 +18,16 @@ function phoneInfo(raw) {
   return { phone: d || null, mobile: d.length === 11 && d[2] === '9' };
 }
 
+// WhatsApp vindo de link wa.me no site: só vale número brasileiro (DDD + 8 ou 9 dígitos).
+// Número estrangeiro costuma ser de quem fez o site; celular antigo sem o 9 ganha o 9.
+function brWhatsApp(raw) {
+  let d = digits(raw);
+  if (d.length >= 12) { if (!d.startsWith('55')) return null; d = d.slice(2); }
+  d = d.replace(/^0+/, '');
+  if (d.length === 10 && /[6-9]/.test(d[2])) d = `${d.slice(0, 2)}9${d.slice(2)}`;
+  return (d.length === 11 && d[2] === '9') || d.length === 10 ? d : null;
+}
+
 function cityState(address, locality) {
   const m = address?.match(/,\s*([^,]+?)\s*-\s*([A-Z]{2})(?:,|\s*$)/);
   if (m) return { city: m[1].trim(), state: m[2] };
@@ -31,7 +41,8 @@ const cleanName = n => { const first = n.split(/\s+[|•–—-]\s+/)[0].trim();
 export function toLead(p, { query, locality }) {
   const { phone, mobile } = phoneInfo(p.phone);
   const site = p.site || {};
-  const whatsapp = digits(site.whatsapp).replace(/^55(?=\d{10,11}$)/, '') || (mobile ? phone : null);
+  const siteWhatsapp = brWhatsApp(site.whatsapp);
+  const whatsapp = siteWhatsapp || (mobile ? phone : null);
   const { city, state } = cityState(p.address, locality);
   // Muitos cadastram o Instagram como "site" no Maps.
   const igSite = p.website?.match(/instagram\.com\/([a-z0-9._]{3,30})/i)?.[1];
@@ -53,7 +64,7 @@ export function toLead(p, { query, locality }) {
       source: 'google_maps', query, locality, captured_at: new Date().toISOString(),
       name: cleanName(p.name), maps_name: p.name, profession: p.category, specialty, city, state,
       address: p.address, phone, whatsapp,
-      whatsapp_source: site.whatsapp ? 'website' : whatsapp ? 'maps_mobile' : null,
+      whatsapp_source: siteWhatsapp ? 'website' : whatsapp ? 'maps_mobile' : null,
       email: site.emails?.[0] || null, emails: site.emails || [],
       website, instagram, has_own_website: hasOwnWebsite(p.website),
       rating: p.rating, reviews: p.reviews,
