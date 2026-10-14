@@ -25,9 +25,19 @@ const LAB_URL='https://37lab.com.br';
 const HOUR=3600e3;
 const STEP_DELAY:Record<1|2|3,number>={1:0,2:24*HOUR,3:48*HOUR};
 const STEP_LABEL:Record<1|2|3,string>={1:'1ª mensagem',2:'2ª mensagem (24h)',3:'3ª mensagem (48h, última)'};
-const firstName=(r:Lead)=>{const n=r.name.trim().replace(/^(?:dr\.?|dra\.?|doutor|doutora)\s+/i,'').split(/\s+/)[0]||'';return n?n.charAt(0).toLocaleUpperCase('pt-BR')+n.slice(1):''};
-function stepMessage(step:1|2|3,r:Lead,url:string){const n=firstName(r),oi=`Oi${n?`, ${n}`:''}!`;
- if(step===1)return`Olá, tudo bem? Aqui é a ${SENDER}, da *37LAB*.\n\nPreparamos um *site profissional para ${r.name.trim()}*${r.specialty?` (${r.specialty})`:''} e ele *já está pronto* para você ver:\n👉 ${url}\n\nHoje a maioria dos pacientes *pesquisa no Google antes de marcar consulta*. Com o site, você aparece de forma profissional, com seus serviços, endereço e um *botão para agendar direto pelo WhatsApp*.\n\nA *37LAB* cria sites e aplicativos para profissionais da saúde. Cuidamos de tudo: design, textos, hospedagem e publicação, sem você se preocupar com nada técnico.\n\n✅ Fotos e textos ajustados com você\n✅ No ar em até *5 dias úteis*\n\nConheça a 37LAB: ${LAB_URL}\n\nPosso colocar o seu site no ar?\n\n_Se este não for o contato certo, é só me avisar._`;
+// Como chamar o lead na mensagem: "Dra. Debora" / "Dr. Emilio" quando o título aparece no nome
+// (ou a profissão indica o gênero: Psicóloga → Dra.), só o primeiro nome para pessoa sem título,
+// e o nome inteiro para clínica/consultório. Não adivinha gênero pelo nome.
+const BUSINESS=/cl[ií]nica|consult[oó]rio|odonto|centro|instituto|espa[cç]o|studio|sa[uú]de|fisio|psicologia|nutri[cç][aã]o|est[eé]tica|reabilit|wellness|grupo|ltda|&/i;
+const cap=(w:string)=>w?w.charAt(0).toLocaleUpperCase('pt-BR')+w.slice(1).toLocaleLowerCase('pt-BR'):'';
+function contactName(r:Lead):{label:string;person:boolean}{const name=r.name.trim().replace(/\s+/g,' ');
+ const t=name.match(/(?:^|\s)(dra|dr)\.?\s+([A-Za-zÀ-ÿ]+)/i);if(t)return{label:`${t[1].toLowerCase()==='dra'?'Dra.':'Dr.'} ${cap(t[2])}`,person:true};
+ const pf=name.match(/^(psic[oó]log[ao]|fonoaudi[oó]log[ao]|odont[oó]log[ao]|m[eé]dic[ao]|psicanalista|nutricionista|fisioterapeuta|dentista|terapeuta)\s+([A-Za-zÀ-ÿ]+)/i);
+ if(pf){const g=pf[1].toLowerCase(),title=/a$/.test(g)&&!/(ista|eta)$/.test(g)?'Dra.':/o$/.test(g)?'Dr.':'';return{label:`${title?title+' ':''}${cap(pf[2])}`,person:true}}
+ if(BUSINESS.test(name))return{label:name,person:false};
+ return{label:cap(name.split(' ')[0]),person:true}}
+function stepMessage(step:1|2|3,r:Lead,url:string){const c=contactName(r),oi=c.person?`Oi, ${c.label}!`:'Oi!';
+ if(step===1)return`Olá, tudo bem? Aqui é a ${SENDER}, da *37LAB*.\n\nPreparamos um *site profissional para ${c.label}*${r.specialty?` (${r.specialty})`:''} e ele *já está pronto* para você ver:\n👉 ${url}\n\nHoje a maioria dos pacientes *pesquisa no Google antes de marcar consulta*. Com o site, você aparece de forma profissional, com seus serviços, endereço e um *botão para agendar direto pelo WhatsApp*.\n\nA *37LAB* cria sites e aplicativos para profissionais da saúde. Cuidamos de tudo: design, textos, hospedagem e publicação, sem você se preocupar com nada técnico.\n\n✅ Fotos e textos ajustados com você\n✅ No ar em até *5 dias úteis*\n\nConheça a 37LAB: ${LAB_URL}\n\nPosso colocar o seu site no ar?`;
  if(step===2)return`${oi} Tudo bem? Conseguiu ver o site que preparamos para você?\n👉 ${url}\n\nEle já está *pronto*: se quiser, ajusto as *fotos e os textos* com você e deixo *no ar em até 5 dias úteis*. Posso seguir?`;
  return`${oi} Passando uma *última vez*: o seu site continua pronto aqui 👉 ${url}\n\nSe fizer sentido, coloco *no ar em até 5 dias úteis*, com tudo ajustado ao seu jeito. Se não for o momento, sem problema, é só me avisar que não envio mais mensagens. 😊\n\n${LAB_URL}`}
 type Seq={m1?:string;m2?:string;m3?:string};
