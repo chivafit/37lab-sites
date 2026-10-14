@@ -20,12 +20,15 @@ function phoneInfo(raw) {
 
 // WhatsApp vindo de link wa.me no site: só vale número brasileiro (DDD + 8 ou 9 dígitos).
 // Número estrangeiro costuma ser de quem fez o site; celular antigo sem o 9 ganha o 9.
+// Fixo só com o 55 explícito: sem ele, 10 dígitos podem ser de outro país (ex.: 354 + 7 dígitos).
 function brWhatsApp(raw) {
   let d = digits(raw);
-  if (d.length >= 12) { if (!d.startsWith('55')) return null; d = d.slice(2); }
+  const hasCountry = d.length >= 12;
+  if (hasCountry) { if (!d.startsWith('55')) return null; d = d.slice(2); }
   d = d.replace(/^0+/, '');
   if (d.length === 10 && /[6-9]/.test(d[2])) d = `${d.slice(0, 2)}9${d.slice(2)}`;
-  return (d.length === 11 && d[2] === '9') || d.length === 10 ? d : null;
+  if (d.length === 11 && d[2] === '9') return d;
+  return hasCountry && d.length === 10 ? d : null;
 }
 
 function cityState(address, locality) {
