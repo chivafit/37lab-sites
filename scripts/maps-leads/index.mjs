@@ -155,8 +155,8 @@ try {
   log(`\n${stats.total} leads · ${stats.com_telefone} telefone · ${stats.com_whatsapp} WhatsApp · ${stats.com_email} e-mail · ${stats.com_site_proprio} com site próprio`);
   log(`CSV:  ${csvPath}\nJSON: ${jsonPath}`);
   if (db) log(`Supabase: ${summary.reduce((n, r) => n + (r.novos || 0), 0)} leads novos em professional_leads`);
-  if (summary.some(r => r.erro_supabase)) log('Algumas buscas não foram gravadas no Supabase: importe o CSV acima em /admin/leads ou rode de novo (leads repetidos são pulados).');
   else log('Para enviar ao painel: rode de novo com --supabase ou importe o CSV em /admin/leads.');
+  if (summary.some(r => r.erro_supabase)) log('Algumas buscas não foram gravadas no Supabase: importe o CSV acima em /admin/leads ou rode de novo (leads repetidos são pulados).');
   if (a.json) console.log(JSON.stringify({ stats, summary, csvPath, jsonPath, leads }, null, 2));
 } catch (e) {
   console.error(`Erro: ${e.message}`);
