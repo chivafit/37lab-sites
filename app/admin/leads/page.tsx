@@ -45,9 +45,10 @@ type Variant='A'|'B';
 const VARIANT_LABEL:Record<Variant,string>={A:'Versão A · longa, com link',B:'Versão B · curta, sem link'};
 // Mostra que olhamos o perfil da pessoa (nota e bairro do Google Maps), para não parecer mensagem em massa.
 // Nota só entra quando é boa (4,5+); sem dados do Maps a frase fica genérica.
-function mapsHook(r:Lead){const raw=r.raw_data||{},rating=Number(raw.rating),hood=String(raw.address||'').match(/-\s*([^,\-]+?),\s*[^,]+?\s*-\s*[A-Z]{2}\b/)?.[1]?.trim();
+// Captação com --supabase grava rating/address/source; o CSV dela chega como nota/endereco/maps_url.
+function mapsHook(r:Lead){const raw=r.raw_data||{},rating=Number(String(raw.rating??raw.nota??'').replace(',','.')),hood=String(raw.address||raw.endereco||'').match(/-\s*([^,\-]+?),\s*[^,]+?\s*-\s*[A-Z]{2}\b/)?.[1]?.trim();
  const nota=rating>=4.5?`, com *nota ${rating.toFixed(1).replace('.',',')}*`:'',onde=hood&&!/^\d/.test(hood)?` aqui no ${hood}`:'';
- if(raw.source!=='google_maps')return'';return`Vi o seu perfil no Google${nota}${onde} 👏${ownSite(raw)===false?' e notei que você ainda não tem site.':''}`}
+ if(raw.source!=='google_maps'&&!raw.maps_url)return'';return`Vi o seu perfil no Google${nota}${onde} 👏${ownSite(raw)===false?' e notei que você ainda não tem site.':''}`}
 function stepMessage(step:1|2|3,r:Lead,url:string,v:Variant){const c=contactName(r),oi=c.person?`Oi, ${c.label}!`:'Oi!',hook=mapsHook(r);
  if(step===1&&v==='B')return`${oi} Tudo bem? Sou a ${SENDER}, da *37LAB*.\n\n${hook?`${hook} `:''}Montei uma *prévia de site* para ${c.person?'o seu consultório':'vocês'}, *sem custo* para ver.\n\nPosso te mandar o link?`;
  if(step===1)return`Olá, tudo bem? Aqui é a ${SENDER}, da *37LAB*.\n\nPreparamos um *site profissional para ${c.label}*${r.specialty?` (${r.specialty})`:''} e ele *já está pronto* para você ver:\n👉 ${url}\n\nHoje a maioria dos pacientes *pesquisa no Google antes de marcar consulta*. Com o site, você aparece de forma profissional, com seus serviços, endereço e um *botão para agendar direto pelo WhatsApp*.\n\nA *37LAB* cria sites e aplicativos para profissionais da saúde. Cuidamos de tudo: design, textos, hospedagem e publicação, sem você se preocupar com nada técnico.\n\n✅ Fotos e textos ajustados com você\n✅ No ar em até *5 dias úteis*\n\nConheça a 37LAB: ${LAB_URL}\n\nPosso colocar o seu site no ar?`;
